@@ -5,13 +5,14 @@
 
 int main(int argc, char *argv[])
 {
-    // ./pipe_read 1.pipe
+    // ./pipe_write3 1.pipe
     ARGS_CHECK(argc, 2);
 
-    int fdr = open(argv[1], O_RDONLY);
-    ERROR_CHECK(fdr, -1, "open");
+    int fdw = open(argv[1], O_WRONLY);
+    ERROR_CHECK(fdw, -1, "open");
 
-    printf("read is opend!\n");
-    close(fdr);
+    printf("write is opend!\n");
+
+    close(fdw);
     return 0;
 }
