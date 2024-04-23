@@ -13,6 +13,9 @@
 #include <signal.h>
 #include <signal.h>
 #include "Log.hpp"
+#include "ThreadPool.hpp"
+#include "Task.hpp"
+#include "Daemon.hpp"
 
 const int defaultfd = -1;
 const std::string defaultip = "0.0.0.0";
@@ -100,8 +103,10 @@ public:
 
     void Start()
     {
-        // for fork();
-        // signal(SIGCHLD, SIG_IGN);
+        // 守护进程化
+        Daemon();
+
+        ThreadPool<Task>::GetInstance()->Start();
         lg(Info, "tcpServer is running....");
         for (;;)
         {
@@ -148,8 +153,8 @@ public:
             // pthread_create(&tid, nullptr, Routine, td);
 
             // version 4 --- 线程池版本
-            // Task t(sockfd, clientip, clientport);
-            // ThreadPool<Task>::GetInstance()->Push(t);
+            Task t(sockfd, clientip, clientport);
+            ThreadPool<Task>::GetInstance()->Push(t);
         }
     }
 
