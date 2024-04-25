@@ -1,0 +1,15 @@
+syntax="proto3";
+package Contacts;
+
+
+
+message PersonInfo {
+    string name = 1;
+    int32 age = 2;
+
+    message Phone {
+        string number = 1;
+    }
+
+    repeated Phone phones = 3;
+}
