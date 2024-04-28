@@ -56,20 +56,14 @@ public:
     {
         std::stringstream ss(req_header[0]);
         ss >> method >> url >> http_version;
-        file_path = root; // ./wwwroot
+        file_path = root; // ./root
         if (url == "/" || url == "/index.html")
         {
             file_path += "/";
-            file_path += homepage; // ./wwwroot/index.html
+            file_path += homepage; // ./root/index.html
         }
         else
-            file_path += url; // /a/b/c/d.html->./wwwroot/a/b/c/d.html
-
-        auto pos = file_path.rfind(".");
-        if (pos == std::string::npos)
-            suffix = ".html";
-        else
-            suffix = file_path.substr(pos);
+            file_path += url; // /a/b/c/d.html->./root/a/b/c/d.html
     }
     void DebugPrint()
     {
@@ -94,9 +88,7 @@ public:
     std::string method;
     std::string url;
     std::string http_version;
-    std::string file_path; // ./wwwroot/a/b/c.html 2.png
-
-    std::string suffix;
+    std::string file_path; // ./root/a/b/c.html 2.png
 };
 
 class HttpServer

@@ -13,7 +13,7 @@
 #include "Socket.hpp"
 #include "Log.hpp"
 
-const std::string wwwroot = "./wwwroot"; // web 根目录
+const std::string root = "./root"; // web 根目录
 const std::string sep = "\r\n";
 const std::string homepage = "index.html";
 
@@ -56,14 +56,14 @@ public:
     {
         std::stringstream ss(req_header[0]);
         ss >> method >> url >> http_version;
-        file_path = wwwroot; // ./wwwroot
+        file_path = root; // ./root
         if (url == "/" || url == "/index.html")
         {
             file_path += "/";
-            file_path += homepage; // ./wwwroot/index.html
+            file_path += homepage; // ./root/index.html
         }
         else
-            file_path += url; // /a/b/c/d.html->./wwwroot/a/b/c/d.html
+            file_path += url; // /a/b/c/d.html->./root/a/b/c/d.html
 
         auto pos = file_path.rfind(".");
         if (pos == std::string::npos)
@@ -94,7 +94,7 @@ public:
     std::string method;
     std::string url;
     std::string http_version;
-    std::string file_path; // ./wwwroot/a/b/c.html 2.png
+    std::string file_path; // ./root/a/b/c.html 2.png
 
     std::string suffix;
 };
@@ -151,6 +151,7 @@ public:
 
         return content;
     }
+
     std::string SuffixToDesc(const std::string &suffix)
     {
         auto iter = content_type.find(suffix);
@@ -159,6 +160,7 @@ public:
         else
             return content_type[suffix];
     }
+
     void HandlerHttp(int sockfd)
     {
         char buffer[10240];
@@ -172,8 +174,8 @@ public:
             req.Parse();
             // req.DebugPrint();
 
-            // std::string path = wwwroot;
-            // path += url; // wwwroot/a/a/b/index.html
+            // std::string path = root;
+            // path += url; // root/a/a/b/index.html
 
             // 返回响应的过程
             std::string text;
@@ -182,7 +184,7 @@ public:
             if (text.empty())
             {
                 ok = false;
-                std::string err_html = wwwroot;
+                std::string err_html = root;
                 err_html += "/";
                 err_html += "err.html";
                 text = ReadHtmlContent(err_html);
@@ -196,15 +198,15 @@ public:
 
             // response_line = "HTTP/1.0 302 Found\r\n";
             std::string response_header = "Content-Length: ";
-            response_header += std::to_string(text.size()); // Content-Length: 11
+            response_header += std::to_string(text.size());
             response_header += "\r\n";
             response_header += "Content-Type: ";
             response_header += SuffixToDesc(req.suffix);
             response_header += "\r\n";
-            response_header += "Set-Cookie: name=haha&&passwd=12345";
+            response_header += "Set-Cookie: name=haha";
             response_header += "\r\n";
-
-            // response_header += "Location: https://www.qq.com\r\n";
+            response_header += "Set-Cookie: passwd=12345";
+            response_header += "\r\n";
             std::string blank_line = "\r\n"; // \n
 
             std::string response = response_line;
@@ -231,5 +233,6 @@ public:
 private:
     Sock listensock_;
     uint16_t port_;
+
     std::unordered_map<std::string, std::string> content_type;
 };

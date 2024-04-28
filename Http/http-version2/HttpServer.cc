@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
 {
     if (argc != 2)
     {
+        std::cout << "\nUsage: " << argv[0] << " port\n"
+                  << std::endl;
         exit(1);
     }
 
