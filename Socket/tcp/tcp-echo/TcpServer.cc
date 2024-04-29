@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
         exit(UsageError);
     }
     uint16_t port = std::stoi(argv[1]);
-    lg.Enable(Classfile);
+    //lg.Enable(Classfile);
     // std::unique_ptr<TcpServer> tcp_svr(new TcpServer(port, "127.0.0.1"));
     std::unique_ptr<TcpServer> tcp_svr(new TcpServer(port));
     tcp_svr->InitServer();
