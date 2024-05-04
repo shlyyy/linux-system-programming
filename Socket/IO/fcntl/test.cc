@@ -43,8 +43,7 @@ int main()
         else
         {
             // 1. 设置成为非阻塞，如果底层fd数据没有就绪，recv/read/write/send, 返回值会以出错的形式返回
-            // 2. a. 真的出错 b. 底层没有就绪
-            // 3. 我怎么区分呢？通过errno区分！！！
+            // 通过errno区分真的出错、还是底层没有就绪
             if (errno == EWOULDBLOCK)
             {
                 cout << "0 fd data not ready, try again!" << endl;
